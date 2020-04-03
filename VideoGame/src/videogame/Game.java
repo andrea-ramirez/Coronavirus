@@ -36,11 +36,13 @@ public class Game implements Runnable {
     private KeyManager keyManager;  // to manage the keyboard
     private LinkedList<Enemy> lista;  //to manage enemys
     private LinkedList<Buenos> lista2;
+    //private LinkedList<Drop> listaDrop;
     private int fontSize = 20;
     private String score = "0";
     private int vidaActual = 4;
     private String vidas;
     private boolean pause = false;
+    private Drop drop;
 
       /**
      * to create title, width and height and set the game is still not running
@@ -100,24 +102,6 @@ public class Game implements Runnable {
         Assets.backSound.setLooping(true);
         Assets.backSound.play();
         
-        /**
-            private void gameInit() {
-
-        aliens = new ArrayList<>();
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 6; j++) {
-
-                Alien alien = new Alien(Commons.ALIEN_INIT_X + 18 * j,
-                        Commons.ALIEN_INIT_Y + 18 * i);
-                aliens.add(alien);
-            }
-        }
-
-        player = new Player();
-        shot = new Shot();
-    }
-    */
         
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 6; j++){
@@ -125,13 +109,6 @@ public class Game implements Runnable {
                 lista.add(enemy);
             }
         }
-        
-        /**
-        for (int i = 1; i <= azar; i++) {
-            Enemy enemy = new Enemy(getWidth() + 100, (int) (Math.random() * getHeight()), 1, 100, 100, this);
-            lista.add(enemy);
-        }
-        */
         
         for (int i = 1; i <= azar2; i++) {
             Buenos buenos = new Buenos(getWidth() - (getWidth() + 100), (int) (Math.random() * getHeight()), 1, 70, 70, this);
@@ -321,8 +298,10 @@ public class Game implements Runnable {
             g.drawString("Vidas " + vidas, 10, 20);
             g.drawString("Score " + score, 80, 20);
             player.render(g);
+            
             for (Enemy enemy : lista) {
                 enemy.render(g);
+                enemy.drop.render(g);
             }
             for (Buenos bueno : lista2) {
                 bueno.render(g);

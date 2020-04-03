@@ -16,6 +16,7 @@ public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
     public static BufferedImage fin;
+    public static BufferedImage drop;
     public static SoundClip backSound;
     public static SoundClip gunShot;
     public static SoundClip ow;
@@ -43,6 +44,7 @@ public class Assets {
         background = ImageLoader.loadImage("/images/hospital.png");
         player = ImageLoader.loadImage("/images/trump.png");
         fin = ImageLoader.loadImage("/images/seacabo.jpg");
+        drop = ImageLoader.loadImage("/images/drop.png");
         backSound = new SoundClip("/sounds/back.wav");
         gunShot = new SoundClip("/sounds/Gunshot.wav");
         ow = new SoundClip("/sounds/preview.wav");

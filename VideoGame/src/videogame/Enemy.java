@@ -15,7 +15,8 @@ public class Enemy extends Item {
 
     private int direction;
     private Game game;
-    private Animation animationLeft;    //to store the animation for going left
+    private Animation animationLights;    //to store the animation for going left
+    Drop drop;
     
     /**
      * To build an enemy object
@@ -31,7 +32,8 @@ public class Enemy extends Item {
         this.direction = direction;
         this.game = game;
         
-        this.animationLeft = new Animation(Assets.enemyLights, 100);
+        this.animationLights = new Animation(Assets.enemyLights, 100);
+        drop = new Drop(this.x,this.y,1,10,10,game);
     }
 
     public int getDirection() {
@@ -41,20 +43,55 @@ public class Enemy extends Item {
     public void setDirection(int direction) {
         this.direction = direction;
     }
+    
+    /**
+    public int getXDrop(){
+        return drop.getX();
+    }
+    
+    public int getYDrop(){
+        return drop.getY();
+    }
+    */
+    
 
     @Override
     public void tick() {
 
         //updating animation
-        this.animationLeft.tick();
-        if (getX() < 0) {
-            setX(game.getWidth() + 60);
-            setY((int) (Math.random() * game.getHeight()));
+        this.animationLights.tick();
+        this.drop.tick();
+        
+        // reset x position and y position if colision with wall
+        if (getX() + 60 >= game.getWidth()) {
+            setX(game.getWidth() - 60);
+            direction = -1;
+            setY(getY() +5);
         }
+        else if (getX() <= -30) {
+            setX(-30);
+            direction = 1;
+            setY(getY() +5);
+        }
+        if (getY() + 80 >= game.getHeight()) {
+            setY(game.getHeight() - 80);
+        }
+        else if (getY() <= -20) {
+            setY(-20);
+        }
+        
+        //mover en eje x
+        if(direction == 1){
+            setX(getX()+ 2);
+        }else{
+            setX(getX() - 2);
+        }
+        
+        
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(animationLeft.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+        g.drawImage(animationLights.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
     }
 }

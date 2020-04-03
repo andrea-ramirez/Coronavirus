@@ -85,6 +85,14 @@ public class Player extends Item {
             //updating animation
             this.animationStanding.tick();
         }
+        
+        // reset x position and y position if colision with wall
+        if (getX() + 60 >= game.getWidth()) {
+            setX(game.getWidth() - 60);
+        }
+        else if (getX() <= -30) {
+            setX(-30);
+        }
 
     }
 
