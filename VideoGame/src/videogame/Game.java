@@ -153,10 +153,10 @@ public class Game implements Runnable {
 
     /**
      *
-     * play ow sound
+     * play sneezing sound
      */
-    public void ow() {
-        Assets.ow.play();
+    public void sneeze() {
+        Assets.sneeze.play();
     }
 
     //esta funcion sirve para cargar el juego
@@ -232,10 +232,24 @@ public class Game implements Runnable {
             PressPause();
             for (Enemy enemy : lista) {
                 enemy.tick();
+                if (player.collision(enemy.drop)) {
+                    //enemy.setX(getWidth() + 100);
+                    //enemy.setY((int) (Math.random() * getHeight()));
+                    enemy.drop.isVisible = false;
+                    sneeze();
+                    if (vidaActual > 0) {
+                        vidaActual--;
+                    } else {
+                        vidas = Integer.toString(Integer.parseInt(vidas) - 1);
+                        vidaActual = 4;
+                    }
+                }
+                
                 if (player.collision(enemy)) {
-                    enemy.setX(getWidth() + 100);
-                    enemy.setY((int) (Math.random() * getHeight()));
-                    ow();
+                    //enemy.setX(getWidth() + 100);
+                    //enemy.setY((int) (Math.random() * getHeight()));
+                    //enemy.drop.isVisible = false;
+                    sneeze();
                     if (vidaActual > 0) {
                         vidaActual--;
                     } else {
@@ -246,6 +260,7 @@ public class Game implements Runnable {
             }
             if (Integer.parseInt(vidas) <= 0) {
                 render();
+                
                 running = false;
             }
         } //manter el boton de p funcionando
@@ -274,16 +289,21 @@ public class Game implements Runnable {
             g.setColor(Color.red);
             g.drawString("Vidas " + vidas, 10, 20);
             g.drawString("Score " + score, 80, 20);
-            player.render(g);
             
+            
+            
+           
             for (Enemy enemy : lista) {
                 enemy.render(g);
                 enemy.drop.render(g);
             }
 
             if (Integer.parseInt(vidas) <= 0) {
-                g.drawImage(Assets.fin, 0, +30, width, height - 30, null);
+                g.drawImage(Assets.trumpOver, player.x, player.y, 100, 100, null);
+                g.drawImage(Assets.fin, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
                 Assets.backSound.stop();
+            }else{
+                player.render(g);
             }
             bs.show();
             g.dispose();

@@ -105,6 +105,7 @@ public class Player extends Item {
         }else{
             g.drawImage(animationStanding.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
         }
+        
     }
 }
 

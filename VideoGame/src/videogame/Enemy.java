@@ -80,7 +80,7 @@ public class Enemy extends Item {
             }
         }
         
-        if(getYDrop() == game.getHeight()){
+        if(getYDrop() >= game.getHeight() - 85){
             setXDrop(getX());
             setYDrop(getY());
             this.drop.isVisible = false;

@@ -7,6 +7,7 @@
 package videogame;
 
 import java.awt.image.BufferedImage;
+import javax.sound.sampled.FloatControl;
 /**
  *
  * @author Diego Garza y Andrea Ramírez
@@ -19,19 +20,18 @@ public class Assets {
     public static BufferedImage drop;
     public static SoundClip backSound;
     public static SoundClip gunShot;
-    public static SoundClip ow;
+    public static SoundClip sneeze;
     public static SoundClip yey;
     
     
-    //animation
+    //animation of trump
     public static BufferedImage sprites;        //to store the sprites
     public static BufferedImage playerLeft[];       //pictures to go left
     public static BufferedImage playerRight[];      //pictures to go right
     public static BufferedImage playerStanding[];   //pictures to stay standing
+    public static BufferedImage spritesOver;
+    public static BufferedImage trumpOver;
     
-    //animation de los buenos
-    public static BufferedImage spritesBuenos;      //to store sprites of Buenos
-    public static BufferedImage buenosRight[];      //pictures for buenos to go right
     
     //animation de enemy
     public static BufferedImage spritesEnemy;       //to store the sprites of enemy
@@ -47,7 +47,7 @@ public class Assets {
         drop = ImageLoader.loadImage("/images/drop.png");
         backSound = new SoundClip("/sounds/back.wav");
         gunShot = new SoundClip("/sounds/Gunshot.wav");
-        ow = new SoundClip("/sounds/preview.wav");
+        sneeze = new SoundClip("/sounds/sneeze.wav");
         yey = new SoundClip("/sounds/bueno.wav");
         
         //getting the player sprites from the picture
@@ -63,29 +63,9 @@ public class Assets {
             playerRight[i] = spreadsheet.crop(i*100,100,100,100);
             playerLeft[i] = spreadsheet.crop(i*100,300,100,100);
         }
-        
-        //getting the sprites from the picture
-        spritesBuenos = ImageLoader.loadImage("/images/mariposa.png");
-        //creating array of images before animations of buenos
-        SpreadSheet sBuenos = new SpreadSheet(spritesBuenos);
-        buenosRight = new BufferedImage[14];
-        // croping the pictures from the sheet into the array
-        for(int i = 0; i < 14; i++){
-            buenosRight[i] = sBuenos.crop(i*70,0,70,70);
-        }
-        
-        /**
-        //getting the sprites from the picture
-        spritesEnemy = ImageLoader.loadImage("/images/dragon.png");
-        //creating array of images before animations of enemy
-        SpreadSheet sEnemy = new SpreadSheet(spritesEnemy);
-        enemyLeft = new BufferedImage[11];
-        // croping the pictures from the sheet into the array
-        for(int i = 0; i < 11; i++){
-            enemyLeft[i] = sEnemy.crop(i*2626/11,1435-(2626/11),2626/11,2626/11);
-        }
-        * */
-        
+        spritesOver = ImageLoader.loadImage("/images/trumpOver.png");
+        SpreadSheet spreadsheetOver = new SpreadSheet(spritesOver);
+        trumpOver = spreadsheetOver.crop(300,0,100,100);
         
         //getting the coronavirus sprites from the picture
         spritesEnemy = ImageLoader.loadImage("/images/corona.png");
