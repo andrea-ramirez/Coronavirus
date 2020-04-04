@@ -9,22 +9,25 @@ import java.awt.Graphics;
 
 /**
  *
- * @author diego
+ * @author Diego Garza y Andrea Ramírez
  */
 public class Shot extends Item {
-
-    private int direction;
-    private int width;
-    private int height;
-    private Game game;
-    public boolean visible;
+    
+    private int direction; // to store the direction
+    private int width;  // to store the width
+    private int height; // to store the height
+    private Game game;  //to store the game
+    public boolean visible; //flag to know if shot exists
 
     /**
+     * To build a shot object
      *
-     * @param width
-     * @param height
-     * @param game
-     * @param Games
+     * @param x an <code>int</code> value to get the x coordinate
+     * @param y an <code>int</code> value to get the y coordinate
+     * @param direction an <code>int</code> value to get the direction
+     * @param width an <code>int</code> value to get the width
+     * @param height an <code>int</code> value to get the height
+     * @param game a <code>game</code> object to get outside elements
      */
     public Shot(int x, int y, int width, int height, Game game) {
         super(x, y, height, width);
@@ -34,13 +37,25 @@ public class Shot extends Item {
         this.visible = true;
     }
 
+    /**
+     * To get the width of the shot
+     *
+     * @return an <code>int</code> value with the width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * To get the height of the shot
+     *
+     * @return an <code>int</code> value with the height
+     */
     public int getHeight() {
         return height;
     }
+
+
 
     @Override
     public void tick() {
