@@ -74,13 +74,13 @@ public class Player extends Item {
     public void tick() {
         // moving player depending on flags
         if (game.getKeyManager().left) {
-           setX((getX() - 3)*direction);
+           setX((getX() - 4)*direction);
            //updating animation
            this.animationLeft.tick();
         }else if (game.getKeyManager().right) {
             this.animationRight.tick();
             //updating animation
-            setX((getX() + 3)*direction);
+            setX((getX() + 4)*direction);
         }else{
             //updating animation
             this.animationStanding.tick();

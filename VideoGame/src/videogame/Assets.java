@@ -43,7 +43,7 @@ public class Assets {
     public static void init() {
         background = ImageLoader.loadImage("/images/hospital.png");
         player = ImageLoader.loadImage("/images/trump.png");
-        fin = ImageLoader.loadImage("/images/seacabo.jpg");
+        fin = ImageLoader.loadImage("/images/gameOver.png");
         drop = ImageLoader.loadImage("/images/drop.png");
         backSound = new SoundClip("/sounds/back.wav");
         gunShot = new SoundClip("/sounds/Gunshot.wav");

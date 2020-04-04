@@ -91,8 +91,8 @@ public abstract class Item {
     public boolean collision(Object o) {
         boolean status = false;  // it does not collission
         if (o instanceof Item) {
-            Rectangle rItem = new Rectangle(this.getX(), this.getY(),
-                    this.getWidth(), this.getHeight());
+            Rectangle rItem = new Rectangle(this.getX()+5, this.getY()+5,
+                    this.getWidth()-10, this.getHeight()-10);
             Item i = (Item) o;
             Rectangle rOther = new Rectangle(i.getX(), i.getY(), i.getWidth(),
                     i.getHeight());
