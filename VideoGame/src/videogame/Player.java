@@ -13,10 +13,10 @@ import java.awt.Graphics;
  */
 public class Player extends Item {
 
-    private int direction;
-    private int width;
-    private int height;
-    private Game game;
+    private int direction; // to store the direction
+    private int width;  // to store the width
+    private int height; // to store the height
+    private Game game;  // to store the game
     
     //animation
     private Animation animationLeft;    //to store the animation for going left
@@ -25,12 +25,12 @@ public class Player extends Item {
 
     /**
      * To build a Player object
-     * @param x an int value to get the x coordinate
-     * @param y an int value to get the y coordinate
-     * @param direction an int value to get the direction
-     * @param width an int value to get the width
-     * @param height an int value to get the height
-     * @param game a game object to get outside elements
+     * @param x an <code>int</code> value to get the x coordinate
+     * @param y an <code>int </code>value to get the y coordinate
+     * @param direction an <code>int</code> value to get the direction
+     * @param width an <code>int</code> value to get the width
+     * @param height an <code>int</code> value to get the height
+     * @param game a <code>game</code> object to get outside elements
      */
     public Player(int x, int y, int direction, int width, int height, Game game) {
         super(x, y, height, width);
@@ -40,38 +40,66 @@ public class Player extends Item {
         this.game = game;
         
         
-
+        //animations
         this.animationLeft = new Animation(Assets.playerLeft, 100);
         this.animationRight = new Animation(Assets.playerRight, 100);
         this.animationStanding = new Animation(Assets.playerStanding, 100);
     }
 
+    /**
+     * To get the direction of the player
+     *
+     * @return an <code>int</code> value with the direction
+     */
     public int getDirection() {
         return direction;
     }
-
+    
+    /**
+     * To get the width of the player
+     *
+     * @return an <code>int</code> value with the width
+     */
     public int getWidth() {
         return width;
     }
-
+    
+    /**
+     * To get the height of the player
+     *
+     * @return an <code>int</code> value with the height
+     */
     public int getHeight() {
         return height;
     }
-
+    
+    /**
+     * To set direction of player
+     * @param direction 
+     */
     public void setDirection(int direction) {
         this.direction = direction;
     }
-
+    
+    /**
+     * To set width of player
+     * @param width 
+     */
     public void setWidth(int width) {
         this.width = width;
     }
-
+    
+    /**
+     * To set height of player
+     * @param height 
+     */
     public void setHeight(int height) {
         this.height = height;
     }
 
     @Override
     public void tick() {
+        
         // moving player depending on flags
         if (game.getKeyManager().left) {
            setX((getX() - 4)*direction);

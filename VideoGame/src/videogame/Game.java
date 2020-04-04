@@ -36,13 +36,14 @@ public class Game implements Runnable {
     private KeyManager keyManager;  // to manage the keyboard
     private LinkedList<Enemy> lista;  //to manage enemys
     private LinkedList<Shot> shots; // to manage shoots
-    private int fontSize = 20;
-    private String score = "0";
-    private int vidaActual = 5;
-    private String vidas;
-    private boolean pause = false;
+    private int fontSize = 20;     //to store the font size
+    private String score = "0";    //to store the score
+    private int vidaActual = 5;     //to store the subset of lifes
+    private String vidas;            //to store the number of lifes
+    private boolean pause = false;   //flag to pause
     private int newVida = 0;
     private int malosmuertos = 0;
+
 
       /**
      * to create title, width and height and set the game is still not running
@@ -60,8 +61,9 @@ public class Game implements Runnable {
     }
 
     /**
+     * To get the player of the game
      *
-     * get player
+     * @return an <code>Player</code> value
      */
     public Player getPlayer() {
         return player;
@@ -89,7 +91,6 @@ public class Game implements Runnable {
      * initializing the display window of the game
      */
     private void init() {
-
         vidas = Integer.toString((int) (Math.random() * ((5 - 3) + 1)) + 3);
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
@@ -100,7 +101,6 @@ public class Game implements Runnable {
         int azar = (int) (Math.random() * ((10 - 8) + 1)) + 8;
         Assets.backSound.setLooping(true);
         Assets.backSound.play();
-        
         
         for(int i = 0; i < 4; i++){
             for(int j = 0; j < 6; j++){
@@ -142,7 +142,11 @@ public class Game implements Runnable {
 
         stop();
     }
-
+    
+    /**
+     * To get the KeyManager
+     * @return keyManager
+     */
     public KeyManager getKeyManager() {
         return keyManager;
     }
@@ -366,9 +370,6 @@ public class Game implements Runnable {
             g.drawString("Vidas " + vidas, 10, 20);
             g.drawString("Score " + score, 110, 20);
             
-            
-            
-           
             for (Enemy enemy : lista) {
                 if(enemy.visible){
                     enemy.render(g);
