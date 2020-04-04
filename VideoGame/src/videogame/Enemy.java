@@ -17,6 +17,8 @@ public class Enemy extends Item {
     private Game game;  // to store the game
     private Animation animationLights;    //to store the animation for coronavirus to light up
     Drop drop;  //// to store the drop
+    public boolean visible = false;
+
     
     /**
      * To build an enemy object
@@ -31,7 +33,7 @@ public class Enemy extends Item {
         super(x, y, width, height);
         this.direction = direction;
         this.game = game;
-        
+        this.visible = true;
         this.animationLights = new Animation(Assets.enemyLights, 100);
         drop = new Drop(this.x,this.y,1,10,10,game);
     }
@@ -93,7 +95,7 @@ public class Enemy extends Item {
         
         //drop
         if(drop.isVisible){
-            setYDrop(getYDrop() + 1);
+            setYDrop(getYDrop() + 2);
         }else{
             setXDrop(getX());
             setYDrop(getY());
@@ -113,22 +115,7 @@ public class Enemy extends Item {
         
         
         // reset x position and y position if colision with wall
-        if (getX() + 60 >= game.getWidth()) {
-            setX(game.getWidth() - 60);
-            direction = -1;
-            setY(getY() +5);
-        }
-        else if (getX() <= -30) {
-            setX(-30);
-            direction = 1;
-            setY(getY() +5);
-        }
-        if (getY() + 80 >= game.getHeight()) {
-            setY(game.getHeight() - 80);
-        }
-        else if (getY() <= -20) {
-            setY(-20);
-        }
+        
         
         //mover en eje x
         if(direction == 1){

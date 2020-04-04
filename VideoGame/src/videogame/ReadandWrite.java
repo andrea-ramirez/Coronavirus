@@ -28,6 +28,7 @@ public class ReadandWrite {
             writer.println("P" + "/" + player.getX() + "/" + player.getY());
             for (Enemy enemy : enemies) {
                 writer.println("E" + "/" + enemy.getX() + "/" + enemy.getY() + "/" + 1 + "/" + enemy.getHeight() + "/" + enemy.getWidth());
+                writer.println("D" + "/" + enemy.drop.getX() + "/" + enemy.drop.getY() + "/" + 1 + enemy.drop.getHeight() + "/" + enemy.drop.getWidth());
             }
             writer.close();
         } catch (IOException ioe) {

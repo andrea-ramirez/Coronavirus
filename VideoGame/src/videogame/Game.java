@@ -35,11 +35,15 @@ public class Game implements Runnable {
     private Player player;          // to use a player
     private KeyManager keyManager;  // to manage the keyboard
     private LinkedList<Enemy> lista;  //to manage enemys
-    private int fontSize = 20;         //to store the font size
-    private String score = "0";        //to store the score
-    private int vidaActual = 4;         //to store the number of lifes
-    private String vidas;               //to store subset of lifes
-    private boolean pause = false;       //flag to pause
+    private LinkedList<Shot> shots; // to manage shoots
+    private int fontSize = 20;     //to store the font size
+    private String score = "0";    //to store the score
+    private int vidaActual = 5;     //to store the subset of lifes
+    private String vidas;            //to store the number of lifes
+    private boolean pause = false;   //flag to pause
+    private int newVida = 0;
+    private int malosmuertos = 0;
+
 
       /**
      * to create title, width and height and set the game is still not running
@@ -53,7 +57,7 @@ public class Game implements Runnable {
         this.width = width;
         this.height = height;
         running = false;
-        keyManager = new KeyManager();
+        keyManager = new KeyManager(this);
     }
 
     /**
@@ -93,6 +97,7 @@ public class Game implements Runnable {
         player = new Player(getWidth() / 2 - 50, getHeight() -150, 1, 100, 100, this);
         display.getJframe().addKeyListener(keyManager);
         lista = new LinkedList<Enemy>();
+        shots = new LinkedList<Shot>();
         int azar = (int) (Math.random() * ((10 - 8) + 1)) + 8;
         Assets.backSound.setLooping(true);
         Assets.backSound.play();
@@ -220,7 +225,32 @@ public class Game implements Runnable {
         }
 
     }
-
+    
+    public int countShoots(){
+        int counterShoot = 0;
+        for(Shot shot : shots){
+            if(shot.visible) counterShoot++;
+        }
+        return counterShoot;
+    }
+    
+    public void shot(){
+        int counter = this.countShoots();
+        if(counter<3){
+            Shot shoot = new Shot((player.getX()+(player.getWidth()/2)),player.getY(),30,30,this);
+            shots.add(shoot);
+            sneeze();
+            counter++;
+        }
+    }
+    
+    private void Perdiste(){
+        g.drawImage(Assets.trumpOver, player.x, player.y, 100, 100, null);
+        g.drawImage(Assets.fin, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
+        Assets.backSound.stop();
+        Assets.loose.play();
+    }
+    
     /**
      *
      * tick game
@@ -233,9 +263,35 @@ public class Game implements Runnable {
             PressLoad();
             PressSave();
             PressPause();
+            shots.stream().map((shot) -> {
+                if ( (shot.getY()+shot.getHeight()) < 0){
+                    shot.visible = false;
+                }
+                return shot;
+            }).map((shot) -> {
+                lista.stream().filter((enemy) -> (enemy.collision(shot) && enemy.visible && shot.visible)).map((enemy) -> {
+                    shot.visible = false;
+                    enemy.visible = false;
+                    this.malosmuertos++;
+                    return enemy;
+                }).map((_item) -> {
+                    newVida++;
+                    if (newVida==4){
+                        vidas = Integer.toString(Integer.parseInt(vidas) + 1);
+                        vidaActual = 6;
+                        newVida=0;
+                    }
+                    return _item;
+                }).forEachOrdered((_item) -> {
+                    score = Integer.toString(Integer.parseInt(score) + 30);
+                });
+                return shot;
+            }).filter((shot) -> (shot.visible)).forEachOrdered((shot) -> {
+                shot.tick();
+            });
             for (Enemy enemy : lista) {
                 enemy.tick();
-                if (player.collision(enemy.drop)) {
+                if (player.collision(enemy.drop) && enemy.drop.isVisible && enemy.visible) {
                     //enemy.setX(getWidth() + 100);
                     //enemy.setY((int) (Math.random() * getHeight()));
                     enemy.drop.isVisible = false;
@@ -244,11 +300,30 @@ public class Game implements Runnable {
                         vidaActual--;
                     } else {
                         vidas = Integer.toString(Integer.parseInt(vidas) - 1);
-                        vidaActual = 4;
+                        vidaActual = 6;
                     }
                 }
-                
-                if (player.collision(enemy)) {
+                if(enemy.visible){
+                    if (enemy.getX() + 10 >= this.getWidth()) {
+                        for(Enemy en : lista){
+                            en.setDirection(-1);
+                            en.setY(en.getY() + 20);
+                        }
+                    }
+                    else if (enemy.getX() <= -10) {
+                        for(Enemy en : lista){
+                            en.setDirection(1);
+                            en.setY(en.getY() + 20);
+                        }
+                    }
+                    if (enemy.getY() == this.getHeight() - 80) {
+                        Perdiste();
+                    }
+                }
+                if (player.collision(enemy) && enemy.visible) {
+                    //enemy.setX(getWidth() + 100);
+                    //enemy.setY((int) (Math.random() * getHeight()));
+                    //enemy.drop.isVisible = false;
                     sneeze();
                     if (vidaActual > 0) {
                         vidaActual--;
@@ -263,6 +338,10 @@ public class Game implements Runnable {
                 
                 running = false;
             }
+            if(malosmuertos==24){
+                render();
+                running = false;
+            }
         } //manter el boton de p funcionando
         else {
             keyManager.pause();
@@ -270,7 +349,8 @@ public class Game implements Runnable {
         }
 
     }
-
+    
+    
     private void render() {
         // get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();
@@ -288,18 +368,27 @@ public class Game implements Runnable {
             g.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
             g.setColor(Color.red);
             g.drawString("Vidas " + vidas, 10, 20);
-            g.drawString("Score " + score, 80, 20);
+            g.drawString("Score " + score, 110, 20);
             
             for (Enemy enemy : lista) {
-                enemy.render(g);
-                enemy.drop.render(g);
+                if(enemy.visible){
+                    enemy.render(g);
+                    enemy.drop.render(g);
+                }
+            }
+            for (Shot shot : shots){
+                shot.render(g);
             }
 
             if (Integer.parseInt(vidas) <= 0) {
-                g.drawImage(Assets.trumpOver, player.x, player.y, 100, 100, null);
-                g.drawImage(Assets.fin, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
+                Perdiste();
+            }
+            else if(malosmuertos==24){
+                g.drawImage(Assets.ganaste, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
                 Assets.backSound.stop();
-            }else{
+                Assets.won.play();
+            }
+            else{
                 player.render(g);
             }
             bs.show();

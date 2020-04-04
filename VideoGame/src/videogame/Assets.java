@@ -16,12 +16,17 @@ public class Assets {
 
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
-    public static BufferedImage fin;    // to store the gameOver image
-    public static BufferedImage drop;   // to store the drop image
-    public static SoundClip backSound;  // to store the song clip  
-    public static SoundClip sneeze;     //to store the sneezing clip
-    public static SoundClip yey;        //to store the yey clip
-    
+
+    public static BufferedImage fin;
+    public static BufferedImage drop;
+    public static BufferedImage lysol;
+    public static BufferedImage ganaste;
+    public static SoundClip backSound;
+    public static SoundClip gunShot;
+    public static SoundClip sneeze;
+    public static SoundClip yey;
+    public static SoundClip won;
+    public static SoundClip loose;
     
     //animation of trump
     public static BufferedImage sprites;        //to store the sprites
@@ -44,9 +49,13 @@ public class Assets {
         player = ImageLoader.loadImage("/images/trump.png");
         fin = ImageLoader.loadImage("/images/gameOver.png");
         drop = ImageLoader.loadImage("/images/drop.png");
+        lysol = ImageLoader.loadImage("/images/lysol.png");
+        ganaste = ImageLoader.loadImage("/images/ganaste.png");
         backSound = new SoundClip("/sounds/back.wav");
         sneeze = new SoundClip("/sounds/sneeze.wav");
         yey = new SoundClip("/sounds/bueno.wav");
+        won = new SoundClip("/sounds/won.wav");
+        loose = new SoundClip("/sounds/perdiste.wav");
         
         //getting the player sprites from the picture
         sprites = ImageLoader.loadImage("/images/trump.png");
