@@ -17,18 +17,17 @@ public class Assets {
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
 
-    public static BufferedImage fin;
-    public static BufferedImage drop;
-    public static BufferedImage lysol;
-    public static BufferedImage ganaste;
-    public static SoundClip backSound;
-    public static SoundClip gunShot;
-    public static SoundClip sneeze;
-    public static SoundClip yey;
-    public static SoundClip won;
-    public static SoundClip loose;
-    public static SoundClip trumpNo;
-    public static SoundClip pop;
+    public static BufferedImage fin;// to store the gameOver image
+    public static BufferedImage drop;   // to store the drop image
+    public static BufferedImage lysol;  // to store the shot image
+    public static BufferedImage ganaste;    // to store the winner image
+    public static SoundClip backSound;  // to store the background music
+    public static SoundClip sneeze; // to store the sneezing sound
+    public static SoundClip yey;    // to store the yey sound
+    public static SoundClip won;    // to store the winner sound
+    public static SoundClip loose;  // to store the loser sound
+    public static SoundClip trumpNo;    // to store trump saying no sound
+    public static SoundClip pop;    // to store the pop sound
     
     //animation of trump
     public static BufferedImage sprites;        //to store the sprites
