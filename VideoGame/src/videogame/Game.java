@@ -41,8 +41,8 @@ public class Game implements Runnable {
     private int vidaActual = 5;     //to store the subset of lifes
     private String vidas;            //to store the number of lifes
     private boolean pause = false;   //flag to pause
-    private int newVida = 0;
-    private int malosmuertos = 0;
+    private int newVida = 0;       //avance a la nueva vida
+    private int malosmuertos = 0;   //enemigos derrotados
 
     /**
      * to create title, width and height and set the game is still not running
@@ -180,7 +180,7 @@ public class Game implements Runnable {
             shots.clear();
             //recorre el archivo
             for (int i = 0; i < datos.size(); i++) {
-                //si es la linea de vidas cambia la vida y el score
+                //si es la linea de vidas cambia la vida, score, enemigos vencidos y camino a la nueva vida
                 if ("V".equals(datos.get(i)[0])) {
                     vidas = datos.get(i)[1];
                     score = datos.get(i)[2];
@@ -192,27 +192,35 @@ public class Game implements Runnable {
                     player.setY(Integer.parseInt(datos.get(i)[2]));
                 } //si es una linea de enemigo 
                 else if ("E".equals(datos.get(i)[0])) {
+                    //booleana para saber si elenemigo es visible
                     boolean visible;
                     if ("true".equals(datos.get(i)[6])) {
                         visible = true;
                     } else {
                         visible = false;
                     }
+                    //crear el nuevo enemigo
                     Enemy en = new Enemy(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), Integer.parseInt(datos.get(i)[3]),
                             Integer.parseInt(datos.get(i)[4]), Integer.parseInt(datos.get(i)[5]), this, visible);
+                    //booleana para checar si su drop esta visible
                     boolean dropVisible;
                     if ("true".equals(datos.get(i)[9])) {
                         dropVisible = true;
                     } else {
                         dropVisible = false;
                     }
+                    //asignar si esta visible
                     en.drop.isVisible = dropVisible;
+                    //cambiar x y y del drop
                     en.drop.y = Integer.parseInt(datos.get(i)[7]);
                     en.drop.x = Integer.parseInt(datos.get(i)[8]);
                     lista.add(en);
+                    //cargar los tiros del usuario
                 } else if ("S".equals(datos.get(i)[0])) {
+                    //crear nuevo tiro
                     Shot s = new Shot(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), 30, 30, this);
                     boolean shotVisible;
+                    //booleana para checar si esta visible
                     if ("true".equals(datos.get(i)[3])) {
                         shotVisible = true;
                     } else {
@@ -257,9 +265,14 @@ public class Game implements Runnable {
         }
 
     }
-
+    /**
+     *  Funcion para contar los tiros activos
+     * @return la cantidad de tiros activos
+     */
     public int countShoots() {
+        //int para contar los tiros
         int counterShoot = 0;
+        //recorrer los tiros y si estan activados sumarlos al int
         for (Shot shot : shots) {
             if (shot.visible) {
                 counterShoot++;
@@ -267,20 +280,31 @@ public class Game implements Runnable {
         }
         return counterShoot;
     }
-
+    /**
+     * Funcion para disparar
+     * 
+     * */
     public void shot() {
+        //contar los tiros activos
         int counter = this.countShoots();
+        //si hay menos de 3 tiros activos
         if (counter < 3) {
+            //crear un tiro nuevo y agregarlo
             Shot shoot = new Shot((player.getX() + (player.getWidth() / 2)), player.getY(), 30, 30, this);
             shots.add(shoot);
+            //activar efecto de sonido
             shout();
-            counter++;
         }
     }
-
+    /**
+     * Funcion para parar juego con mensaje de derrota
+     */
     private void Perdiste() {
+        //imagen de derrota
         g.drawImage(Assets.trumpOver, player.x, player.y, 100, 100, null);
+        //pantalla de derrota
         g.drawImage(Assets.fin, +getWidth() / 4, +100, getWidth() / 2, getHeight() / 2 - 30, null);
+        //sonido de derrota empieza y cancion general para
         Assets.backSound.stop();
         Assets.loose.play();
     }
@@ -294,52 +318,69 @@ public class Game implements Runnable {
             keyManager.tick();
             // avancing player with colision
             player.tick();
-            PressLoad();
-            PressSave();
-            PressPause();
+            PressLoad(); //checar si se carga
+            PressSave(); //checar si se guarda
+            PressPause(); //checar si se pone pausa
+            //recorrer el array de tiros
             shots.stream().map((shot) -> {
+                //si el tiro salio de la pantalla se toma como que desaparece
                 if ((shot.getY() + shot.getHeight()) < 0) {
                     shot.visible = false;
                 }
                 return shot;
             }).map((shot) -> {
+                //se filtra los enemigos que esten colisionando con el tiro , sean visibles y su enemigo sea visible
                 lista.stream().filter((enemy) -> (enemy.collision(shot) && enemy.visible && shot.visible)).map((enemy) -> {
+                    //se cambia el valor del tiro, enemigo a que desaparecen, se agrega un contador a 
                     shot.visible = false;
                     enemy.visible = false;
                     this.malosmuertos++;
+                    //se reproduce sonido de eliminar enemigo
                     Assets.pop.play();
-                    return enemy;
-                }).map((_item) -> {
+                    //se aumenta uno al contador para la proxima vida
                     newVida++;
+                    //si el contador llega a 4
                     if (newVida == 4) {
+                        //se aumenta una vida
                         vidas = Integer.toString(Integer.parseInt(vidas) + 1);
+                        //se cambia el valor de vida actual restante al maximo
                         vidaActual = 6;
+                        //se reinicia el contador para una nueva vida
                         newVida = 0;
+                        //se reproduce el sonido de ganar una nueva vida
                         Assets.yey.play();
                     }
-                    return _item;
+                    return enemy;
+                    //se recorren los 
                 }).forEachOrdered((_item) -> {
+                    //se suma el valor del score
                     score = Integer.toString(Integer.parseInt(score) + 30);
                 });
                 return shot;
             }).filter((shot) -> (shot.visible)).forEachOrdered((shot) -> {
+                //se mueven los tiros que son visibles
                 shot.tick();
             });
+            //se recorren los enemigos
             for (Enemy enemy : lista) {
+                //se mueven
                 enemy.tick();
+                //si el jugador toda una drop delenemigo y esto esta visible
                 if (player.collision(enemy.drop) && enemy.drop.isVisible && enemy.visible) {
-                    //enemy.setX(getWidth() + 100);
-                    //enemy.setY((int) (Math.random() * getHeight()));
+                     //se cambia el proyectil del enemigo a falso
                     enemy.drop.isVisible = false;
+                    //se reproduce el sonido de daño
                     sneeze();
+                    //se resta uno a la vida actual
                     if (vidaActual > 0) {
                         vidaActual--;
-                        sneeze();
                     } else {
+                        //si ya no queda vida en la vida actual se resta uno a la vida general y se reseta la vida temporal
                         vidas = Integer.toString(Integer.parseInt(vidas) - 1);
                         vidaActual = 6;
                     }
                 }
+                //si el enemigo esta visible y toca con una pared todos los enemigos bajan uno lugar en y
                 if (enemy.visible) {
                     if (enemy.getX() + 10 >= this.getWidth()) {
                         for (Enemy en : lista) {
@@ -356,24 +397,21 @@ public class Game implements Runnable {
                         Perdiste();
                     }
                 }
+                // si el jugador toca un enemigo este pierde  una vida pero cuenta como enemigo derrotado
                 if (player.collision(enemy) && enemy.visible) {
-                    //enemy.setX(getWidth() + 100);
-                    //enemy.setY((int) (Math.random() * getHeight()));
-                    //enemy.drop.isVisible = false;
                     sneeze();
-                    if (vidaActual > 0) {
-                        vidaActual--;
-                    } else {
-                        vidas = Integer.toString(Integer.parseInt(vidas) - 1);
-                        vidaActual = 4;
-                    }
+                    vidas = Integer.toString(Integer.parseInt(vidas) - 1);
+                    vidaActual = 6;
+                    enemy.visible = false;
+                    malosmuertos++;
                 }
             }
+            //si te quedas sin vida se para el juego
             if (Integer.parseInt(vidas) <= 0) {
                 render();
-
                 running = false;
             }
+            // si matas a todos los enemigos se para el juego
             if (malosmuertos == 24) {
                 render();
                 running = false;
@@ -404,20 +442,22 @@ public class Game implements Runnable {
             g.setColor(Color.red);
             g.drawString("Vidas " + vidas, 10, 20);
             g.drawString("Score " + score, 110, 20);
-
+            //se renderisan los enemigos visibles con sus respectivos drop
             lista.stream().filter((enemy) -> (enemy.visible)).map((enemy) -> {
                 enemy.render(g);
                 return enemy;
             }).forEachOrdered((enemy) -> {
                 enemy.drop.render(g);
             });
+            //se renderizan los tiros
             shots.forEach((shot) -> {
                 shot.render(g);
             });
-
+            //si se paro el juego por vidas se muestra la pantalla de perder
             if (Integer.parseInt(vidas) <= 0) {
                 Perdiste();
-            } else if (malosmuertos == 24) {
+            } //si se paro por matar a todos los enemigos se muestra la pantalla de victoria
+            else if (malosmuertos == 24) {
                 g.drawImage(Assets.ganaste, +getWidth() / 4, +100, getWidth() / 2, getHeight() / 2 - 30, null);
                 Assets.backSound.stop();
                 Assets.won.play();
