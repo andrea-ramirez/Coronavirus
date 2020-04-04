@@ -35,14 +35,11 @@ public class Game implements Runnable {
     private Player player;          // to use a player
     private KeyManager keyManager;  // to manage the keyboard
     private LinkedList<Enemy> lista;  //to manage enemys
-    private LinkedList<Buenos> lista2;
-    //private LinkedList<Drop> listaDrop;
     private int fontSize = 20;
     private String score = "0";
     private int vidaActual = 4;
     private String vidas;
     private boolean pause = false;
-    private Drop drop;
 
       /**
      * to create title, width and height and set the game is still not running
@@ -96,9 +93,7 @@ public class Game implements Runnable {
         player = new Player(getWidth() / 2 - 50, getHeight() -150, 1, 100, 100, this);
         display.getJframe().addKeyListener(keyManager);
         lista = new LinkedList<Enemy>();
-        lista2 = new LinkedList<Buenos>();
         int azar = (int) (Math.random() * ((10 - 8) + 1)) + 8;
-        int azar2 = (int) (Math.random() * ((15 - 10) + 1)) + 10;
         Assets.backSound.setLooping(true);
         Assets.backSound.play();
         
@@ -110,10 +105,6 @@ public class Game implements Runnable {
             }
         }
         
-        for (int i = 1; i <= azar2; i++) {
-            Buenos buenos = new Buenos(getWidth() - (getWidth() + 100), (int) (Math.random() * getHeight()), 1, 70, 70, this);
-            lista2.add(buenos);
-        }
     }
 
     @Override
@@ -175,7 +166,6 @@ public class Game implements Runnable {
         //si hay algo vacia los buenos y los malos
         if (datos.size() > 0) {
             lista.clear();
-            lista2.clear();
             //recorre el archivo
             for (int i = 0; i < datos.size(); i++) {
                 //si es la linea de vidas cambia la vida y el score
@@ -190,9 +180,6 @@ public class Game implements Runnable {
                 else if ("E".equals(datos.get(i)[0])) {
                     lista.add(new Enemy(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), Integer.parseInt(datos.get(i)[3]),
                             Integer.parseInt(datos.get(i)[4]), Integer.parseInt(datos.get(i)[5]), this));
-                } else if ("B".equals(datos.get(i)[0])) {
-                    lista2.add(new Buenos(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), Integer.parseInt(datos.get(i)[3]),
-                            Integer.parseInt(datos.get(i)[4]), Integer.parseInt(datos.get(i)[5]), this));
                 }
             }
         }
@@ -200,7 +187,7 @@ public class Game implements Runnable {
 
     public void SaveP() {
         //guardar juego
-        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, lista2, player);
+        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, player);
     }
 
     public void PressSave() {
@@ -257,16 +244,6 @@ public class Game implements Runnable {
                     }
                 }
             }
-            for (Buenos bueno : lista2) {
-                bueno.tick();
-                if (player.collision(bueno)) {
-                    bueno.setX(-100);
-                    bueno.setY((int) (Math.random() * getHeight()));
-                    yey();
-                    score = Integer.toString(Integer.parseInt(score) + 5);
-
-                }
-            }
             if (Integer.parseInt(vidas) <= 0) {
                 render();
                 running = false;
@@ -303,9 +280,7 @@ public class Game implements Runnable {
                 enemy.render(g);
                 enemy.drop.render(g);
             }
-            for (Buenos bueno : lista2) {
-                bueno.render(g);
-            }
+
             if (Integer.parseInt(vidas) <= 0) {
                 g.drawImage(Assets.fin, 0, +30, width, height - 30, null);
                 Assets.backSound.stop();

@@ -20,7 +20,7 @@ import java.util.LinkedList;
 public class ReadandWrite {
 
     //use it to save game
-    public static void Saved(String strFileName, int vidas, int score, LinkedList<Enemy> enemies, LinkedList<Buenos> buenos, Player player) {
+    public static void Saved(String strFileName, int vidas, int score, LinkedList<Enemy> enemies, Player player) {
         try {
             //write every  enemy, score, goodgu, player required attributes the first letter its a identifier
             PrintWriter writer = new PrintWriter(new FileWriter(strFileName));
@@ -28,9 +28,6 @@ public class ReadandWrite {
             writer.println("P" + "/" + player.getX() + "/" + player.getY());
             for (Enemy enemy : enemies) {
                 writer.println("E" + "/" + enemy.getX() + "/" + enemy.getY() + "/" + 1 + "/" + enemy.getHeight() + "/" + enemy.getWidth());
-            }
-            for (Buenos bueno : buenos) {
-                writer.println("B" + "/" + +bueno.getX() + "/" + bueno.getY() + "/" + 1 + "/" + bueno.getHeight() + "/" + bueno.getWidth());
             }
             writer.close();
         } catch (IOException ioe) {

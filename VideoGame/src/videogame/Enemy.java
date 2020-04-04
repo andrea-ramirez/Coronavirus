@@ -44,7 +44,7 @@ public class Enemy extends Item {
         this.direction = direction;
     }
     
-    /**
+
     public int getXDrop(){
         return drop.getX();
     }
@@ -52,7 +52,14 @@ public class Enemy extends Item {
     public int getYDrop(){
         return drop.getY();
     }
-    */
+    
+    public void setXDrop(int newx){
+        this.drop.x = newx;
+    }
+    
+    public void setYDrop(int newy){
+        this.drop.y = newy;
+    }
     
 
     @Override
@@ -60,7 +67,25 @@ public class Enemy extends Item {
 
         //updating animation
         this.animationLights.tick();
-        this.drop.tick();
+        
+        //drop
+        if(drop.isVisible){
+            setYDrop(getYDrop() + 1);
+        }else{
+            setXDrop(getX());
+            setYDrop(getY());
+            int azar = (int) (Math.random() * ((10 - 1) + 1));
+            if(azar == 1){
+                this.drop.isVisible = true;
+            }
+        }
+        
+        if(getYDrop() == game.getHeight()){
+            setXDrop(getX());
+            setYDrop(getY());
+            this.drop.isVisible = false;
+        }
+        
         
         // reset x position and y position if colision with wall
         if (getX() + 60 >= game.getWidth()) {

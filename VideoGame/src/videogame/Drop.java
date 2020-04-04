@@ -17,6 +17,8 @@ public class Drop extends Item {
     private int width;
     private int height;
     private Game game;
+    public boolean isVisible;
+    private int azar;
     
 
     /**
@@ -34,6 +36,8 @@ public class Drop extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
+        this.isVisible = false;
+        this.azar = (int) (Math.random() * ((3 - 1) + 1));
         
     }
 
@@ -80,12 +84,13 @@ public class Drop extends Item {
     
     @Override
     public void tick() {
-        setY(getY() + 1);
-        
+        //setY(getY() + 1);
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.drop, getX(), getY(), getWidth(), getHeight(), null);
+        //if(isVisible){
+            g.drawImage(Assets.drop, getX(), getY(), getWidth(), getHeight(), null);
+        //}
     }
 }
