@@ -16,12 +16,11 @@ public class Assets {
 
     public static BufferedImage background; // to store background image
     public static BufferedImage player;     // to store the player image
-    public static BufferedImage fin;
-    public static BufferedImage drop;
-    public static SoundClip backSound;
-    public static SoundClip gunShot;
-    public static SoundClip sneeze;
-    public static SoundClip yey;
+    public static BufferedImage fin;    // to store the gameOver image
+    public static BufferedImage drop;   // to store the drop image
+    public static SoundClip backSound;  // to store the song clip  
+    public static SoundClip sneeze;     //to store the sneezing clip
+    public static SoundClip yey;        //to store the yey clip
     
     
     //animation of trump
@@ -29,13 +28,13 @@ public class Assets {
     public static BufferedImage playerLeft[];       //pictures to go left
     public static BufferedImage playerRight[];      //pictures to go right
     public static BufferedImage playerStanding[];   //pictures to stay standing
-    public static BufferedImage spritesOver;
-    public static BufferedImage trumpOver;
+    public static BufferedImage spritesOver;    //to store the sprite for trump when gaeme is over
+    public static BufferedImage trumpOver;      //picture when game is over
     
     
-    //animation de enemy
-    public static BufferedImage spritesEnemy;       //to store the sprites of enemy
-    public static BufferedImage enemyLights[];        //pictures for enemy to go left
+    //animation de coronavirus
+    public static BufferedImage spritesEnemy;       //to store the sprites of coronavirus
+    public static BufferedImage enemyLights[];        //pictures for coronavirus to light up
 
     /**
      * initializing the images and sounds of the game
@@ -46,7 +45,6 @@ public class Assets {
         fin = ImageLoader.loadImage("/images/gameOver.png");
         drop = ImageLoader.loadImage("/images/drop.png");
         backSound = new SoundClip("/sounds/back.wav");
-        gunShot = new SoundClip("/sounds/Gunshot.wav");
         sneeze = new SoundClip("/sounds/sneeze.wav");
         yey = new SoundClip("/sounds/bueno.wav");
         

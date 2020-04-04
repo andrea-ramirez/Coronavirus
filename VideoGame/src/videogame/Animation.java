@@ -20,21 +20,21 @@ public class Animation {
     
     /**
      * Creating the animation with all the frames and the speed for each
-     * @param frames an array of images
-     * @param speed an int value for the speed of every frame
+     * @param frames an <code>array</code> of images
+     * @param speed an <code>int</code> value for the speed of every frame
      */
     public Animation(BufferedImage[] frames, int speed){
-        this.frames = frames;
-        this.speed = speed;
-        index = 0;
-        timer = 0;
-        lastTime = System.currentTimeMillis();
+        this.frames = frames;   //storing frames
+        this.speed = speed;     //storing speed
+        index = 0;              //initializing index
+        timer = 0;              //initializing timer
+        lastTime = System.currentTimeMillis(); //getting the initial timer
     }
     
     
     /**
      * Gettnig the current frame to paint
-     * @return the BuferedImage to the corresponding frame to paint
+     * @return the <code>BuferedImage</code> to the corresponding frame to paint
      */
     public BufferedImage getCurrentFrame(){
         return frames[index];

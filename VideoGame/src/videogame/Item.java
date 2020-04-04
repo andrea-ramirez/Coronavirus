@@ -16,14 +16,16 @@ public abstract class Item {
 
     protected int x;        // to store x position
     protected int y;       // to store y position
-    protected int width;
-    protected int height;
+    protected int width;    // to store the width
+    protected int height;   // to store the height
 
     /**
      * Set the initial values to create the item
      *
      * @param x <b>x</b> position of the object
      * @param y <b>y</b> position of the object
+     * @param width <b> width </b> width of the object
+     * @param height <b>height</b> height of the object
      */
     public Item(int x, int y, int width, int height) {
         this.x = x;
@@ -67,11 +69,19 @@ public abstract class Item {
     public void setY(int y) {
         this.y = y;
     }
-
+    
+    /**
+     * Get width value
+     * @return width
+     */
     public int getWidth() {
         return width;
     }
-
+    
+    /**
+     * Get height value
+     * @return height
+     */
     public int getHeight() {
         return height;
     }
