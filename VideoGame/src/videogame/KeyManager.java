@@ -19,10 +19,13 @@ public class KeyManager implements KeyListener {
     public boolean pause;   // flag to pause the game
     public boolean save;    // flag to save the game
     public boolean load;    // flag to load the game
+    public boolean shoot;
+    private Game game;
 
     private boolean keys[];  // to store all the flags for every key
 
-    public KeyManager() {
+    public KeyManager(Game game) {
+        this.game = game;
         keys = new boolean[256];
     }
 
@@ -34,7 +37,7 @@ public class KeyManager implements KeyListener {
     public void keyPressed(KeyEvent e) {
         // set true to every key pressed exept P
         if(e.getKeyCode()!=KeyEvent.VK_P){
-            keys[e.getKeyCode()] = true;
+                keys[e.getKeyCode()] = true;
         }
 
     }
@@ -46,7 +49,11 @@ public class KeyManager implements KeyListener {
         if(e.getKeyCode()==KeyEvent.VK_P){
             // we do this in order to only react when its release
             keys[e.getKeyCode()] = !keys[e.getKeyCode()];
-        }else{
+        }else if(e.getKeyCode() == KeyEvent.VK_SPACE){
+            game.shot();
+            keys[e.getKeyCode()] = false;
+        }
+        else{
             keys[e.getKeyCode()] = false;
         }
     }
@@ -60,6 +67,7 @@ public class KeyManager implements KeyListener {
         save = keys[KeyEvent.VK_G];
         load = keys[KeyEvent.VK_C];
         pause = keys[KeyEvent.VK_P];
+        shoot = keys[KeyEvent.VK_SPACE];
 
     }
     //to use it when its pause
