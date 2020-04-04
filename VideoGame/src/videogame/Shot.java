@@ -24,7 +24,7 @@ public class Shot extends Item {
      * @param width
      * @param height
      * @param game
-     * @param player
+     * @param Games
      */
     public Shot(int x, int y, int width, int height, Game game) {
         super(x, y, height, width);

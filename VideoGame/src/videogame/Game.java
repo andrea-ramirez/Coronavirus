@@ -185,6 +185,7 @@ public class Game implements Runnable {
                     vidas = datos.get(i)[1];
                     score = datos.get(i)[2];
                     malosmuertos = Integer.parseInt(datos.get(i)[3]);
+                    newVida = Integer.parseInt(datos.get(i)[4]);
                 } //si es la linea de player cambia la poscicion
                 else if ("P".equals(datos.get(i)[0])) {
                     player.setX(Integer.parseInt(datos.get(i)[1]));
@@ -206,8 +207,8 @@ public class Game implements Runnable {
                         dropVisible = false;
                     }
                     en.drop.isVisible = dropVisible;
-                    en.drop.y = Integer.parseInt(datos.get(i)[8]);
-                    en.drop.x = Integer.parseInt(datos.get(i)[7]);
+                    en.drop.y = Integer.parseInt(datos.get(i)[7]);
+                    en.drop.x = Integer.parseInt(datos.get(i)[8]);
                     lista.add(en);
                 } else if ("S".equals(datos.get(i)[0])) {
                     Shot s = new Shot(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), 30, 30, this);
@@ -226,7 +227,7 @@ public class Game implements Runnable {
 
     public void SaveP() {
         //guardar juego
-        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, player, shots, malosmuertos);
+        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, player, shots, malosmuertos, newVida);
     }
 
     public void PressSave() {
