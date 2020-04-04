@@ -36,8 +36,8 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         // set true to every key pressed exept P
-        if(e.getKeyCode()!=KeyEvent.VK_P){
-                keys[e.getKeyCode()] = true;
+        if (e.getKeyCode() != KeyEvent.VK_P) {
+            keys[e.getKeyCode()] = true;
         }
 
     }
@@ -45,15 +45,14 @@ public class KeyManager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // set false to every key released exept p
-        
-        if(e.getKeyCode()==KeyEvent.VK_P){
+
+        if (e.getKeyCode() == KeyEvent.VK_P) {
             // we do this in order to only react when its release
             keys[e.getKeyCode()] = !keys[e.getKeyCode()];
-        }else if(e.getKeyCode() == KeyEvent.VK_SPACE){
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             game.shot();
             keys[e.getKeyCode()] = false;
-        }
-        else{
+        } else {
             keys[e.getKeyCode()] = false;
         }
     }
@@ -70,8 +69,9 @@ public class KeyManager implements KeyListener {
         shoot = keys[KeyEvent.VK_SPACE];
 
     }
+
     //to use it when its pause
     public void pause() {
-       pause = keys[KeyEvent.VK_P];
+        pause = keys[KeyEvent.VK_P];
     }
 }

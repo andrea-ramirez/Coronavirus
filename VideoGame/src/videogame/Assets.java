@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package videogame;
 
 import java.awt.image.BufferedImage;
 import javax.sound.sampled.FloatControl;
+
 /**
  *
  * @author Diego Garza y Andrea Ramírez
@@ -27,6 +27,8 @@ public class Assets {
     public static SoundClip yey;
     public static SoundClip won;
     public static SoundClip loose;
+    public static SoundClip trumpNo;
+    public static SoundClip pop;
     
     //animation of trump
     public static BufferedImage sprites;        //to store the sprites
@@ -35,8 +37,7 @@ public class Assets {
     public static BufferedImage playerStanding[];   //pictures to stay standing
     public static BufferedImage spritesOver;    //to store the sprite for trump when gaeme is over
     public static BufferedImage trumpOver;      //picture when game is over
-    
-    
+
     //animation de coronavirus
     public static BufferedImage spritesEnemy;       //to store the sprites of coronavirus
     public static BufferedImage enemyLights[];        //pictures for coronavirus to light up
@@ -56,7 +57,9 @@ public class Assets {
         yey = new SoundClip("/sounds/bueno.wav");
         won = new SoundClip("/sounds/won.wav");
         loose = new SoundClip("/sounds/perdiste.wav");
-        
+        trumpNo = new SoundClip("/sounds/trumpNo.wav");
+        pop = new SoundClip("/sounds/pop.wav");
+
         //getting the player sprites from the picture
         sprites = ImageLoader.loadImage("/images/trump.png");
         //creating array of images before animations of player
@@ -65,23 +68,23 @@ public class Assets {
         playerRight = new BufferedImage[6];
         playerLeft = new BufferedImage[6];
         // croping the pictures from the sheet into the array
-        for(int i = 0; i < 6; i++){
-            playerStanding[i] = spreadsheet.crop(i*100,0,100,100);
-            playerRight[i] = spreadsheet.crop(i*100,100,100,100);
-            playerLeft[i] = spreadsheet.crop(i*100,300,100,100);
+        for (int i = 0; i < 6; i++) {
+            playerStanding[i] = spreadsheet.crop(i * 100, 0, 100, 100);
+            playerRight[i] = spreadsheet.crop(i * 100, 100, 100, 100);
+            playerLeft[i] = spreadsheet.crop(i * 100, 300, 100, 100);
         }
         spritesOver = ImageLoader.loadImage("/images/trumpOver.png");
         SpreadSheet spreadsheetOver = new SpreadSheet(spritesOver);
-        trumpOver = spreadsheetOver.crop(300,0,100,100);
-        
+        trumpOver = spreadsheetOver.crop(300, 0, 100, 100);
+
         //getting the coronavirus sprites from the picture
         spritesEnemy = ImageLoader.loadImage("/images/corona.png");
         //creating array of images before animations of enemy
         SpreadSheet sEnemy = new SpreadSheet(spritesEnemy);
         enemyLights = new BufferedImage[2];
         // croping the pictures from the sheet into the array
-        enemyLights[0] = sEnemy.crop(0,0,256,248);
-        enemyLights[1] = sEnemy.crop(256,0,256,248);
+        enemyLights[0] = sEnemy.crop(0, 0, 256, 248);
+        enemyLights[1] = sEnemy.crop(256, 0, 256, 248);
     }
 
 }

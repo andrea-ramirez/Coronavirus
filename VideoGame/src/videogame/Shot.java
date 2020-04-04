@@ -12,12 +12,13 @@ import java.awt.Graphics;
  * @author diego
  */
 public class Shot extends Item {
+
     private int direction;
     private int width;
     private int height;
     private Game game;
     public boolean visible;
-    
+
     /**
      *
      * @param width
@@ -25,14 +26,14 @@ public class Shot extends Item {
      * @param game
      * @param player
      */
-    public Shot(int x, int y, int width, int height, Game game){
+    public Shot(int x, int y, int width, int height, Game game) {
         super(x, y, height, width);
         this.width = width;
         this.height = height;
         this.game = game;
         this.visible = true;
     }
-    
+
     public int getWidth() {
         return width;
     }
@@ -40,7 +41,7 @@ public class Shot extends Item {
     public int getHeight() {
         return height;
     }
-    
+
     @Override
     public void tick() {
         setY(getY() - 5);
@@ -48,8 +49,8 @@ public class Shot extends Item {
 
     @Override
     public void render(Graphics g) {
-        if(this.visible){
-            g.drawImage(Assets.lysol, getX(), getY(),this.getWidth(),this.getHeight(), null);
+        if (this.visible) {
+            g.drawImage(Assets.lysol, getX(), getY(), this.getWidth(), this.getHeight(), null);
         }
     }
 }

@@ -20,15 +20,18 @@ import java.util.LinkedList;
 public class ReadandWrite {
 
     //use it to save game
-    public static void Saved(String strFileName, int vidas, int score, LinkedList<Enemy> enemies, Player player) {
+    public static void Saved(String strFileName, int vidas, int score, LinkedList<Enemy> enemies, Player player, LinkedList<Shot> shot, int muertos) {
         try {
             //write every  enemy, score, goodgu, player required attributes the first letter its a identifier
             PrintWriter writer = new PrintWriter(new FileWriter(strFileName));
-            writer.println("V" + "/" + vidas + "/" + score);
+            writer.println("V" + "/" + vidas + "/" + score + "/" + muertos);
             writer.println("P" + "/" + player.getX() + "/" + player.getY());
             for (Enemy enemy : enemies) {
-                writer.println("E" + "/" + enemy.getX() + "/" + enemy.getY() + "/" + 1 + "/" + enemy.getHeight() + "/" + enemy.getWidth());
-                writer.println("D" + "/" + enemy.drop.getX() + "/" + enemy.drop.getY() + "/" + 1 + enemy.drop.getHeight() + "/" + enemy.drop.getWidth());
+                writer.println("E" + "/" + enemy.getX() + "/" + enemy.getY() + "/" + enemy.getDirection() + "/" + enemy.getHeight() + "/" + enemy.getWidth()
+                        + "/" + enemy.visible + "/" + enemy.drop.getY() + "/" + enemy.drop.getX() + "/" + enemy.drop.isVisible);
+            }
+            for (Shot sh : shot) {
+                writer.println("S" + "/" + sh.getX() + "/" + sh.getY() + "/" + sh.visible);
             }
             writer.close();
         } catch (IOException ioe) {

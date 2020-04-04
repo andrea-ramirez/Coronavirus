@@ -17,7 +17,7 @@ public class Player extends Item {
     private int width;  // to store the width
     private int height; // to store the height
     private Game game;  // to store the game
-    
+
     //animation
     private Animation animationLeft;    //to store the animation for going left
     private Animation animationRight;   //to store the animation for going right
@@ -25,6 +25,7 @@ public class Player extends Item {
 
     /**
      * To build a Player object
+     *
      * @param x an <code>int</code> value to get the x coordinate
      * @param y an <code>int </code>value to get the y coordinate
      * @param direction an <code>int</code> value to get the direction
@@ -38,8 +39,7 @@ public class Player extends Item {
         this.width = width;
         this.height = height;
         this.game = game;
-        
-        
+
         //animations
         this.animationLeft = new Animation(Assets.playerLeft, 100);
         this.animationRight = new Animation(Assets.playerRight, 100);
@@ -54,7 +54,7 @@ public class Player extends Item {
     public int getDirection() {
         return direction;
     }
-    
+
     /**
      * To get the width of the player
      *
@@ -63,7 +63,7 @@ public class Player extends Item {
     public int getWidth() {
         return width;
     }
-    
+
     /**
      * To get the height of the player
      *
@@ -72,26 +72,29 @@ public class Player extends Item {
     public int getHeight() {
         return height;
     }
-    
+
     /**
      * To set direction of player
-     * @param direction 
+     *
+     * @param direction
      */
     public void setDirection(int direction) {
         this.direction = direction;
     }
-    
+
     /**
      * To set width of player
-     * @param width 
+     *
+     * @param width
      */
     public void setWidth(int width) {
         this.width = width;
     }
-    
+
     /**
      * To set height of player
-     * @param height 
+     *
+     * @param height
      */
     public void setHeight(int height) {
         this.height = height;
@@ -99,26 +102,25 @@ public class Player extends Item {
 
     @Override
     public void tick() {
-        
+
         // moving player depending on flags
         if (game.getKeyManager().left) {
-           setX((getX() - 4)*direction);
-           //updating animation
-           this.animationLeft.tick();
-        }else if (game.getKeyManager().right) {
+            setX((getX() - 4) * direction);
+            //updating animation
+            this.animationLeft.tick();
+        } else if (game.getKeyManager().right) {
             this.animationRight.tick();
             //updating animation
-            setX((getX() + 4)*direction);
-        }else{
+            setX((getX() + 4) * direction);
+        } else {
             //updating animation
             this.animationStanding.tick();
         }
-        
+
         // reset x position and y position if colision with wall
         if (getX() + 60 >= game.getWidth()) {
             setX(game.getWidth() - 60);
-        }
-        else if (getX() <= -30) {
+        } else if (getX() <= -30) {
             setX(-30);
         }
 
@@ -127,13 +129,12 @@ public class Player extends Item {
     @Override
     public void render(Graphics g) {
         if (game.getKeyManager().left) {
-           g.drawImage(animationLeft.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
-        }else if (game.getKeyManager().right) {
+            g.drawImage(animationLeft.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
+        } else if (game.getKeyManager().right) {
             g.drawImage(animationRight.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
-        }else{
+        } else {
             g.drawImage(animationStanding.getCurrentFrame(), getX(), getY(), getWidth(), getHeight(), null);
         }
-        
+
     }
 }
-

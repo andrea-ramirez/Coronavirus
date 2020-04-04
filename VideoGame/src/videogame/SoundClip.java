@@ -36,7 +36,6 @@ public class SoundClip {
         this();
         load(filename);
     }
-    
 
     public void setLooping(boolean looping) {
 

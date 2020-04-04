@@ -69,17 +69,19 @@ public abstract class Item {
     public void setY(int y) {
         this.y = y;
     }
-    
+
     /**
      * Get width value
+     *
      * @return width
      */
     public int getWidth() {
         return width;
     }
-    
+
     /**
      * Get height value
+     *
      * @return height
      */
     public int getHeight() {
@@ -101,8 +103,8 @@ public abstract class Item {
     public boolean collision(Object o) {
         boolean status = false;  // it does not collission
         if (o instanceof Item) {
-            Rectangle rItem = new Rectangle(this.getX()+5, this.getY()+5,
-                    this.getWidth()-10, this.getHeight()-10);
+            Rectangle rItem = new Rectangle(this.getX() + 5, this.getY() + 5,
+                    this.getWidth() - 10, this.getHeight() - 10);
             Item i = (Item) o;
             Rectangle rOther = new Rectangle(i.getX(), i.getY(), i.getWidth(),
                     i.getHeight());

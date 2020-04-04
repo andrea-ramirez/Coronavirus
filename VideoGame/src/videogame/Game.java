@@ -44,8 +44,7 @@ public class Game implements Runnable {
     private int newVida = 0;
     private int malosmuertos = 0;
 
-
-      /**
+    /**
      * to create title, width and height and set the game is still not running
      *
      * @param title to set the title of the window
@@ -94,21 +93,21 @@ public class Game implements Runnable {
         vidas = Integer.toString((int) (Math.random() * ((5 - 3) + 1)) + 3);
         display = new Display(title, getWidth(), getHeight());
         Assets.init();
-        player = new Player(getWidth() / 2 - 50, getHeight() -150, 1, 100, 100, this);
+        player = new Player(getWidth() / 2 - 50, getHeight() - 150, 1, 100, 100, this);
         display.getJframe().addKeyListener(keyManager);
         lista = new LinkedList<Enemy>();
         shots = new LinkedList<Shot>();
         int azar = (int) (Math.random() * ((10 - 8) + 1)) + 8;
         Assets.backSound.setLooping(true);
         Assets.backSound.play();
-        
-        for(int i = 0; i < 4; i++){
-            for(int j = 0; j < 6; j++){
-                Enemy enemy = new Enemy(150+ 30 *j,5 + 30 *i,1,20,20,this);
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 6; j++) {
+                Enemy enemy = new Enemy(150 + 30 * j, 5 + 30 * i, 1, 20, 20, this, true);
                 lista.add(enemy);
             }
         }
-        
+
     }
 
     @Override
@@ -142,9 +141,10 @@ public class Game implements Runnable {
 
         stop();
     }
-    
+
     /**
      * To get the KeyManager
+     *
      * @return keyManager
      */
     public KeyManager getKeyManager() {
@@ -166,7 +166,10 @@ public class Game implements Runnable {
     public void sneeze() {
         Assets.sneeze.play();
     }
-
+    
+   public void shout() {
+       Assets.trumpNo.play();
+   }
     //esta funcion sirve para cargar el juego
     public void LoadP() {
         //abre el archivo
@@ -174,20 +177,48 @@ public class Game implements Runnable {
         //si hay algo vacia los buenos y los malos
         if (datos.size() > 0) {
             lista.clear();
+            shots.clear();
             //recorre el archivo
             for (int i = 0; i < datos.size(); i++) {
                 //si es la linea de vidas cambia la vida y el score
                 if ("V".equals(datos.get(i)[0])) {
                     vidas = datos.get(i)[1];
                     score = datos.get(i)[2];
+                    malosmuertos = Integer.parseInt(datos.get(i)[3]);
                 } //si es la linea de player cambia la poscicion
                 else if ("P".equals(datos.get(i)[0])) {
                     player.setX(Integer.parseInt(datos.get(i)[1]));
                     player.setY(Integer.parseInt(datos.get(i)[2]));
                 } //si es una linea de enemigo 
                 else if ("E".equals(datos.get(i)[0])) {
-                    lista.add(new Enemy(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), Integer.parseInt(datos.get(i)[3]),
-                            Integer.parseInt(datos.get(i)[4]), Integer.parseInt(datos.get(i)[5]), this));
+                    boolean visible;
+                    if ("true".equals(datos.get(i)[6])) {
+                        visible = true;
+                    } else {
+                        visible = false;
+                    }
+                    Enemy en = new Enemy(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), Integer.parseInt(datos.get(i)[3]),
+                            Integer.parseInt(datos.get(i)[4]), Integer.parseInt(datos.get(i)[5]), this, visible);
+                    boolean dropVisible;
+                    if ("true".equals(datos.get(i)[9])) {
+                        dropVisible = true;
+                    } else {
+                        dropVisible = false;
+                    }
+                    en.drop.isVisible = dropVisible;
+                    en.drop.y = Integer.parseInt(datos.get(i)[8]);
+                    en.drop.x = Integer.parseInt(datos.get(i)[7]);
+                    lista.add(en);
+                } else if ("S".equals(datos.get(i)[0])) {
+                    Shot s = new Shot(Integer.parseInt(datos.get(i)[1]), Integer.parseInt(datos.get(i)[2]), 30, 30, this);
+                    boolean shotVisible;
+                    if ("true".equals(datos.get(i)[3])) {
+                        shotVisible = true;
+                    } else {
+                        shotVisible = false;
+                    }
+                    s.visible = shotVisible;
+                    shots.add(s);
                 }
             }
         }
@@ -195,7 +226,7 @@ public class Game implements Runnable {
 
     public void SaveP() {
         //guardar juego
-        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, player);
+        Saved("Juego.txt", Integer.parseInt(vidas), Integer.parseInt(score), lista, player, shots, malosmuertos);
     }
 
     public void PressSave() {
@@ -225,32 +256,34 @@ public class Game implements Runnable {
         }
 
     }
-    
-    public int countShoots(){
+
+    public int countShoots() {
         int counterShoot = 0;
-        for(Shot shot : shots){
-            if(shot.visible) counterShoot++;
+        for (Shot shot : shots) {
+            if (shot.visible) {
+                counterShoot++;
+            }
         }
         return counterShoot;
     }
-    
-    public void shot(){
+
+    public void shot() {
         int counter = this.countShoots();
-        if(counter<3){
-            Shot shoot = new Shot((player.getX()+(player.getWidth()/2)),player.getY(),30,30,this);
+        if (counter < 3) {
+            Shot shoot = new Shot((player.getX() + (player.getWidth() / 2)), player.getY(), 30, 30, this);
             shots.add(shoot);
-            sneeze();
+            shout();
             counter++;
         }
     }
-    
-    private void Perdiste(){
+
+    private void Perdiste() {
         g.drawImage(Assets.trumpOver, player.x, player.y, 100, 100, null);
-        g.drawImage(Assets.fin, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
+        g.drawImage(Assets.fin, +getWidth() / 4, +100, getWidth() / 2, getHeight() / 2 - 30, null);
         Assets.backSound.stop();
         Assets.loose.play();
     }
-    
+
     /**
      *
      * tick game
@@ -264,7 +297,7 @@ public class Game implements Runnable {
             PressSave();
             PressPause();
             shots.stream().map((shot) -> {
-                if ( (shot.getY()+shot.getHeight()) < 0){
+                if ((shot.getY() + shot.getHeight()) < 0) {
                     shot.visible = false;
                 }
                 return shot;
@@ -273,13 +306,15 @@ public class Game implements Runnable {
                     shot.visible = false;
                     enemy.visible = false;
                     this.malosmuertos++;
+                    Assets.pop.play();
                     return enemy;
                 }).map((_item) -> {
                     newVida++;
-                    if (newVida==4){
+                    if (newVida == 4) {
                         vidas = Integer.toString(Integer.parseInt(vidas) + 1);
                         vidaActual = 6;
-                        newVida=0;
+                        newVida = 0;
+                        Assets.yey.play();
                     }
                     return _item;
                 }).forEachOrdered((_item) -> {
@@ -298,20 +333,20 @@ public class Game implements Runnable {
                     sneeze();
                     if (vidaActual > 0) {
                         vidaActual--;
+                        sneeze();
                     } else {
                         vidas = Integer.toString(Integer.parseInt(vidas) - 1);
                         vidaActual = 6;
                     }
                 }
-                if(enemy.visible){
+                if (enemy.visible) {
                     if (enemy.getX() + 10 >= this.getWidth()) {
-                        for(Enemy en : lista){
+                        for (Enemy en : lista) {
                             en.setDirection(-1);
                             en.setY(en.getY() + 20);
                         }
-                    }
-                    else if (enemy.getX() <= -10) {
-                        for(Enemy en : lista){
+                    } else if (enemy.getX() <= -10) {
+                        for (Enemy en : lista) {
                             en.setDirection(1);
                             en.setY(en.getY() + 20);
                         }
@@ -335,10 +370,10 @@ public class Game implements Runnable {
             }
             if (Integer.parseInt(vidas) <= 0) {
                 render();
-                
+
                 running = false;
             }
-            if(malosmuertos==24){
+            if (malosmuertos == 24) {
                 render();
                 running = false;
             }
@@ -349,8 +384,7 @@ public class Game implements Runnable {
         }
 
     }
-    
-    
+
     private void render() {
         // get the buffer strategy from the display
         bs = display.getCanvas().getBufferStrategy();
@@ -369,26 +403,24 @@ public class Game implements Runnable {
             g.setColor(Color.red);
             g.drawString("Vidas " + vidas, 10, 20);
             g.drawString("Score " + score, 110, 20);
-            
-            for (Enemy enemy : lista) {
-                if(enemy.visible){
-                    enemy.render(g);
-                    enemy.drop.render(g);
-                }
-            }
-            for (Shot shot : shots){
+
+            lista.stream().filter((enemy) -> (enemy.visible)).map((enemy) -> {
+                enemy.render(g);
+                return enemy;
+            }).forEachOrdered((enemy) -> {
+                enemy.drop.render(g);
+            });
+            shots.forEach((shot) -> {
                 shot.render(g);
-            }
+            });
 
             if (Integer.parseInt(vidas) <= 0) {
                 Perdiste();
-            }
-            else if(malosmuertos==24){
-                g.drawImage(Assets.ganaste, +getWidth()/4, +100, getWidth()/2, getHeight()/2 - 30, null);
+            } else if (malosmuertos == 24) {
+                g.drawImage(Assets.ganaste, +getWidth() / 4, +100, getWidth() / 2, getHeight() / 2 - 30, null);
                 Assets.backSound.stop();
                 Assets.won.play();
-            }
-            else{
+            } else {
                 player.render(g);
             }
             bs.show();
